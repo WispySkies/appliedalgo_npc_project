@@ -5,7 +5,7 @@ TEST_CASES_DIR="test_cases"
 run_min_graph_coloring() {
     test_case="$1"
     input_file="$2"
-    output=$(python min_graph_coloring.py <"${TEST_CASES_DIR}/${test_case}/${input_file}")
+    output=$(python cs412_mingraphcolor_exact.py <"${TEST_CASES_DIR}/${test_case}/${input_file}")
     echo -e "${test_case}/${input_file}\n${output}"
 }
 
