@@ -1,16 +1,16 @@
 15
-a b
-a c
-a d
-a e
-a f
-b c
-b d
 b e
+b d
+c e
+e f
+a b
+d e
 b f
 c d
-c e
 c f
-d e
+a f
+b c
+a e
 d f
-e f
+a d
+a c
