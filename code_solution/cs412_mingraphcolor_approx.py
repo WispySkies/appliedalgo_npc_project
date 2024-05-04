@@ -34,9 +34,11 @@ def main():
         graph[v].add(u)
         graph[u].add(v)
     
-    print(graph)
+    # print(graph)
     greedy_color(graph, colors)
-    print(colors)
+    print(max(colors.values()) + 1)
+    for vertex, color in colors.items():
+        print(vertex, color)
     
 
 def greedy_color(graph, colors):
