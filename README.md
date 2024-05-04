@@ -2,12 +2,9 @@
 
 Minimum Graph Coloring problem - NPComplete
 
+how to run: python3 cs412_mingraphcolor_approx.py, python3 cs412_mingraphcolor_exact.py
 
-reductions: blabla
-
-presentations: xyz
-
-how to run: wie lauft man?
+Input is how many edges (int), then a list of edges. Undirected graph.
 
 Declan McCue, Conor McFadden (CS B.S. 2025)
 
