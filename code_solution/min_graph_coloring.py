@@ -5,72 +5,67 @@ Decision-based Minimum Graph Coloring
 
 Declan McCue - Conor McFadden
 
-Some helpful references:
-
-https://en.wikipedia.org/wiki/Graph_coloring
-https://en.wikipedia.org/wiki/Complete_coloring
+Heavily based on https://www.geeksforgeeks.org/m-coloring-problem/
 """
 
 from collections import defaultdict
 
-def color(G, v) -> list[tuple]:
-    
-    # can color vertex with color
-    def is_safe_assignment(vertex, colors, proposed) -> bool:
-        for neighbor in G[vertex]:
-            if colors[neighbor] == proposed:
-                return False
-        return True
+class Graph:
+    def __init__(self, edges):
+        
+        # build adj-list based graph on assignments
+        self.graph = defaultdict(set)
+        for v1, v2 in edges:
+            self.graph[v1].add(v2)
+            self.graph[v2].add(v1)
 
-    # backtracking recursive coloring
-    def color_graph(vertex, colors) -> bool:
-        print(colors)
-        if vertex == len(G):
+        # unpack all vals into an iterable, set union for dups, get length for count
+        self.vertex_count = len(set().union(*self.graph.values()))
+
+    def can_color(self, vertex, used_colors, target_color):
+
+        # check all neighbors of vertex and make sure the colors not used
+        for neighbor in self.graph[vertex]:
+            if used_colors[neighbor] == target_color:
+                return False
+        
+        return True
+    
+    def color_recursive(self, vertices, vertex, result):
+        if vertex == self.vertex_count:
             return True
         
-        for color in range(1, v + 1):
-            if is_safe_assignment(vertex, colors, color):
-                colors[vertex] = color
-                if color_graph(vertex + 1, colors):
+        for proposed_color in range(self.vertex_count):
+            if self.can_color(vertices[vertex], result, proposed_color):
+                result[vertices[vertex]] = proposed_color
+
+                if self.color_recursive(vertices, vertex + 1, result):
                     return True
-                colors[vertex] = color
+                
+                result[vertices[vertex]] = -1
+    
+    def brute_force_color(self):
+        vertices = list(self.graph.keys())
+        result = {vertex: -1 for vertex in vertices}
+
+        if not self.color_recursive(vertices, 0, result):
+            print("No solution exists.")
+            return None
         
-        return False
-
-    # iterate over 
-    colors = [0] * (len(G) + 1)
-    if color_graph(0, colors):
-        return [(vertex, colors[vertex]) for vertex in range(len(G))]
-    else:
-        return None
-
-def min_graph_coloring(G, V) -> int:
-    colors = V + 1
-    assignments = []
-    for i in range(V + 1, -1, -1):
-        new_assignments = color(G, i)
-        if new_assignments:
-            colors = min(colors, i)
-            assignments = new_assignments
-    return colors, assignments
+        max_color = max(result.values()) + 1
+        return result, max_color
 
 def main():
     K = int(input())
     pairs = [input().split() for _ in range(K)]
 
-    # build adj-list based graph on assignments
-    graph = defaultdict(set)
-    for v1, v2 in pairs:
-        graph[v1].add(v2)
-        graph[v2].add(v1)
-    
-    # min colors is realistically between 0 and V
-    # could argue lower, count vertices and iterate
-    V = len(set().union(*graph.values()))
+    graph = Graph(pairs)
+    colors, n_colors = graph.brute_force_color()
 
-    min_colors, assignments = min_graph_coloring(graph, V)
-    print(min_colors)
-    print(assignments)
+    if colors:
+        print(n_colors)
+        for vertex, color in colors.items():
+            print(vertex, color)
 
 if __name__ == "__main__":
     main()
