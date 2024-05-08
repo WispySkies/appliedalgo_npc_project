@@ -41,6 +41,29 @@ def main():
         print(vertex, color)
     
 
+def get_min(edges):
+    K = len(edges)
+    pairs = [(u, v) for u, v in edges]
+
+    colors = defaultdict()
+    graph = defaultdict()
+    
+    for pair in pairs:
+        v, u = pair[0], pair[1]
+        colors[v], colors[u] = None, None
+        
+        if v not in graph:
+            graph[v] = set()
+            
+        if u not in graph:
+            graph[u] = set()
+            
+        graph[v].add(u)
+        graph[u].add(v)
+    
+    greedy_color(graph, colors)
+    return max(colors.values()) + 1
+
 def greedy_color(graph, colors):
     
     vertexes = graph.keys()

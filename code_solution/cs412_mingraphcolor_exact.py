@@ -55,6 +55,14 @@ class Graph:
         max_color = max(result.values()) + 1
         return result, max_color
 
+def get_min(edges):
+    K = len(edges)
+    pairs = [(u, v) for u, v in edges]
+
+    graph = Graph(pairs)
+    _, max_color = graph.brute_force_color()
+    return max_color
+
 def main():
     K = int(input())
     pairs = [input().split() for _ in range(K)]
